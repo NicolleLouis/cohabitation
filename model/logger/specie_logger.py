@@ -8,11 +8,14 @@ class SpecieLogger:
     ):
         self.agent_class = agent_class
         self.name = agent_class.name
-        self.number_death = 0
+        self.number_death = {}
         self.number_children = 0
 
-    def add_death(self):
-        self.number_death += 1
+    def add_death(self, reason):
+        if reason in self.number_death:
+            self.number_death[reason] += 1
+        else:
+            self.number_death[reason] = 1
 
     def add_children(self, children_number):
         self.number_children += children_number

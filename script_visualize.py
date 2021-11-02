@@ -1,3 +1,3 @@
 from service.visualization import VisualizationService
 
-VisualizationService.display_model()
+VisualizationService.display_model(size=25)

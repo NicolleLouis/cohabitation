@@ -1,7 +1,10 @@
 import uuid
 
 from model.agents.animal import Animal
-from model.agents.specie_logger import SpecieLogger
+from model.agents.grass import Grass
+from model.logger.grass_logger import GrassLogger
+from model.logger.specie_logger import SpecieLogger
+from service.geographic import GeographicService
 
 
 class AgentGenerator:
@@ -61,16 +64,36 @@ class AgentGenerator:
         self.schedule.add(agent)
         return agent
 
-    def initialise_agents(self):
-        specie_logger = SpecieLogger()
+    def add_herbivore(self):
+        animal_logger = SpecieLogger(Animal)
         self.add_agents_randomly(
             agents_number=100,
             agent_parameters={
                 "life_expectancy": 25,
+                "stomach_size": 5,
                 "reproduction_probability": 1,
-                "maximum_children_number": 1,
+                "maximum_children_number": 10,
                 "sexual_maturity": 10,
-                "specie_logger": specie_logger
+                "specie_logger": animal_logger
             }
         )
-        return [specie_logger]
+        return animal_logger
+
+    def add_grass(self):
+        grass_logger = GrassLogger()
+        positions = GeographicService.get_all_positions(self.model.size)
+        for position in positions:
+            self.add_agents(
+                agents_number=1,
+                agent_class=Grass,
+                position=position,
+                agent_parameters={
+                    "grass_logger": grass_logger
+                }
+            )
+        return grass_logger
+
+    def initialise_agents(self):
+        animal_logger = self.add_herbivore()
+        grass_logger = self.add_grass()
+        return [animal_logger, grass_logger]

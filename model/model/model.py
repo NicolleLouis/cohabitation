@@ -1,6 +1,7 @@
 from mesa import Model
 from mesa.time import RandomActivation
 
+from model.agents.animal import Animal
 from model.model.agent_generator import AgentGenerator
 from model.model.grid import Grid
 
@@ -9,11 +10,12 @@ class CohabitationModel(Model):
     def __init__(
             self,
             size=25,
-            maximum_number_of_turn=500,
+            maximum_number_of_turn=100,
     ):
         super().__init__()
 
         self.schedule = RandomActivation(self)
+        self.size = size
         self.grid = Grid(
             size=size
         )
@@ -37,6 +39,17 @@ class CohabitationModel(Model):
         self.should_continue()
         if not self.running:
             self.end_step()
+
+    def reset_reproduction(self):
+        agents = self.schedule.agents
+        animals = list(
+            filter(
+                lambda agent: isinstance(agent, Animal),
+                agents
+            )
+        )
+        for animal in animals:
+            animal.reset_reproduction()
 
     def should_continue(self):
         self.turn_number += 1

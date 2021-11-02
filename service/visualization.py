@@ -22,7 +22,9 @@ class VisualizationService:
             visualization_elements=[
                 grid,
             ],
-            model_params={}
+            model_params={
+                "size": size,
+            }
         )
         server.port = 8521
         server.launch()
