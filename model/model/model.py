@@ -17,6 +17,11 @@ class CohabitationModel(Model):
         self.grid = Grid(
             size=size
         )
+        self.agent_generator = AgentGenerator(
+            model=self,
+            grid=self.grid,
+            schedule=self.schedule
+        )
         self.generate_agents()
 
         self.running = True
@@ -24,12 +29,7 @@ class CohabitationModel(Model):
         self.maximum_number_of_turn = maximum_number_of_turn
 
     def generate_agents(self):
-        agent_generator = AgentGenerator(
-            model=self,
-            grid=self.grid,
-            schedule=self.schedule
-        )
-        agent_generator.initialise_agents()
+        self.agent_generator.initialise_agents()
 
     def step(self):
         self.schedule.step()
