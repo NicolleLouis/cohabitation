@@ -5,6 +5,8 @@ from service.probability import ProbabilityService
 
 
 class Animal(Agent):
+    name = "Basic Animal"
+
     def __init__(
             self,
             unique_id,
@@ -13,6 +15,7 @@ class Animal(Agent):
             reproduction_probability,
             maximum_children_number,
             sexual_maturity,
+            specie_logger,
     ):
         super().__init__(unique_id, model)
         self.grid = self.model.grid
@@ -21,6 +24,7 @@ class Animal(Agent):
         self.reproduction_probability = reproduction_probability
         self.maximum_children_number = maximum_children_number
         self.sexual_maturity = sexual_maturity
+        self.specie_logger = specie_logger
 
     def step(self):
         self.move()
@@ -63,6 +67,7 @@ class Animal(Agent):
                     maximum=self.maximum_children_number,
                     minimum=1,
                 )
+                self.specie_logger.add_children(number_of_children)
                 for _children in range(number_of_children):
                     print("ca ken sec")
                     self.create_child()
@@ -75,6 +80,7 @@ class Animal(Agent):
                 "reproduction_probability": self.reproduction_probability,
                 "maximum_children_number": self.maximum_children_number,
                 "sexual_maturity": self.sexual_maturity,
+                "specie_logger": self.specie_logger,
             },
             agent_class=type(self),
             position=self.pos
@@ -86,6 +92,7 @@ class Animal(Agent):
             self.death()
 
     def death(self):
+        self.specie_logger.add_death()
         self.model.schedule.remove(self)
         self.grid.remove_agent(self)
 

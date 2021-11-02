@@ -22,14 +22,15 @@ class CohabitationModel(Model):
             grid=self.grid,
             schedule=self.schedule
         )
-        self.generate_agents()
+        self.loggers = self.generate_agents()
 
         self.running = True
         self.turn_number = 0
         self.maximum_number_of_turn = maximum_number_of_turn
 
     def generate_agents(self):
-        self.agent_generator.initialise_agents()
+        loggers = self.agent_generator.initialise_agents()
+        return loggers
 
     def step(self):
         self.schedule.step()
@@ -44,4 +45,5 @@ class CohabitationModel(Model):
             return
 
     def end_step(self):
-        print("end of game i guess")
+        for logger in self.loggers:
+            logger.log()

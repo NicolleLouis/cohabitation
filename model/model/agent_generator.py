@@ -1,6 +1,7 @@
 import uuid
 
 from model.agents.animal import Animal
+from model.agents.specie_logger import SpecieLogger
 
 
 class AgentGenerator:
@@ -61,12 +62,15 @@ class AgentGenerator:
         return agent
 
     def initialise_agents(self):
+        specie_logger = SpecieLogger()
         self.add_agents_randomly(
             agents_number=100,
             agent_parameters={
                 "life_expectancy": 25,
                 "reproduction_probability": 1,
-                "maximum_children_number": 4,
+                "maximum_children_number": 1,
                 "sexual_maturity": 10,
+                "specie_logger": specie_logger
             }
         )
+        return [specie_logger]
