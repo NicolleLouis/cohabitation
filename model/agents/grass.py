@@ -20,6 +20,8 @@ class Grass(Agent):
         self.grass_logger.add_generated(self.food_growth)
 
     def eaten(self, food_eaten):
+        if food_eaten < 0:
+            raise Exception("Food consumption must be > 0")
         self.food = self.food - food_eaten
         self.grass_logger.add_eaten(food_eaten)
 

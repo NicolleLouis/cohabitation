@@ -1,12 +1,17 @@
 from mesa import Agent
 
-from model.agents.grass import Grass
 from service.movement import MovementService
 from service.probability import ProbabilityService
 
 
 class Animal(Agent):
     name = "Basic Animal"
+
+    def step(self):
+        self.move()
+        self.nutrition()
+        self.reproduction()
+        self.ageing()
 
     def __init__(
             self,
@@ -18,6 +23,7 @@ class Animal(Agent):
             maximum_children_number,
             sexual_maturity,
             specie_logger,
+            color="green",
     ):
         super().__init__(unique_id, model)
         self.grid = self.model.grid
@@ -31,13 +37,8 @@ class Animal(Agent):
         self.reproduction_probability = reproduction_probability
         self.maximum_children_number = maximum_children_number
         self.sexual_maturity = sexual_maturity
+        self.color = color
         self.specie_logger = specie_logger
-
-    def step(self):
-        self.move()
-        self.nutrition()
-        self.reproduction()
-        self.ageing()
 
     def move(self):
         if not self.is_alive:
@@ -64,18 +65,7 @@ class Animal(Agent):
         self.eat()
 
     def eat(self):
-        grass = list(
-            filter(
-                lambda agent: isinstance(agent, Grass),
-                self.grid.get_grid_content(
-                    positions=self.pos
-                )
-            )
-        )[0]
-        food_needed = self.stomach_size - self.food
-        food_eaten = min(grass.food, food_needed)
-        self.food = self.food + food_eaten
-        grass.eaten(food_eaten)
+        raise NotImplementedError("Each animal must have a eat function")
 
     def get_neighbors(self):
         neighbors = self.grid.get_grid_content(
@@ -86,7 +76,7 @@ class Animal(Agent):
         neighbors.remove(self)
         neighbors = list(
             filter(
-                lambda neighbor: isinstance(neighbor, Animal),
+                lambda neighbor: isinstance(neighbor, type(self)),
                 neighbors
             )
         )
@@ -133,11 +123,6 @@ class Animal(Agent):
         self.model.agent_generator.add_agents(
             agents_number=1,
             agent_parameters={
-                "life_expectancy": self.life_expectancy,
-                "reproduction_probability": self.reproduction_probability,
-                "maximum_children_number": self.maximum_children_number,
-                "sexual_maturity": self.sexual_maturity,
-                "stomach_size": self.stomach_size,
                 "specie_logger": self.specie_logger,
             },
             agent_class=type(self),
@@ -158,15 +143,14 @@ class Animal(Agent):
         self.model.schedule.remove(self)
         self.grid.remove_agent(self)
 
-    @staticmethod
-    def display():
+    def display(self):
         """
         Documentation is in the class: CanvasGrid(VisualizationElement)
         file: CanvasGridVisualization from mesa.visualization.modules
         """
         data = {
             "Shape": "circle",
-            "Color": "green",
+            "Color": self.color,
             "Filled": "false",
             "Layer": 0,
             "r": 0.5,
