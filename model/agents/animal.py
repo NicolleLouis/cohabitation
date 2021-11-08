@@ -17,12 +17,13 @@ class Animal(Agent):
             self,
             unique_id,
             model,
-            stomach_size,
-            life_expectancy,
-            reproduction_probability,
-            maximum_children_number,
-            sexual_maturity,
+            stomach_size: int,
+            life_expectancy: int,
+            reproduction_probability: int,
+            maximum_children_number: int,
+            sexual_maturity: int,
             specie_logger,
+            weight: int,
             color="green",
     ):
         super().__init__(unique_id, model)
@@ -33,6 +34,7 @@ class Animal(Agent):
 
         self.stomach_size = stomach_size
         self.food = self.stomach_size
+        self.weight = weight
         self.life_expectancy = life_expectancy
         self.reproduction_probability = reproduction_probability
         self.maximum_children_number = maximum_children_number
@@ -142,6 +144,9 @@ class Animal(Agent):
         self.specie_logger.add_death(reason)
         self.model.schedule.remove(self)
         self.grid.remove_agent(self)
+
+    def __str__(self):
+        return f"{self.name}, age: {self.age}, stomach: {self.food}"
 
     def display(self):
         """

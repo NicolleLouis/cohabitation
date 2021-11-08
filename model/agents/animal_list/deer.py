@@ -1,8 +1,8 @@
 from model.agents.herbivore import Herbivore
 
 
-class Rabbit(Herbivore):
-    name = "Lapin"
+class Deer(Herbivore):
+    name = "Biche"
 
     def __init__(
             self,
@@ -10,13 +10,14 @@ class Rabbit(Herbivore):
             unique_id,
             specie_logger,
     ):
-        stomach_size = 3
-        life_expectancy = 10
-        reproduction_probability = 1
-        maximum_children_number = 8
+        stomach_size = 30
+        life_expectancy = 50
+        reproduction_probability = 10
+        maximum_children_number = 1
         sexual_maturity = 5
-        color = "green"
-        super(Rabbit, self).__init__(
+        weight = 100
+        color = "blue"
+        super(Deer, self).__init__(
             unique_id=unique_id,
             model=model,
             stomach_size=stomach_size,
@@ -25,5 +26,6 @@ class Rabbit(Herbivore):
             maximum_children_number=maximum_children_number,
             sexual_maturity=sexual_maturity,
             specie_logger=specie_logger,
+            weight=weight,
             color=color,
         )

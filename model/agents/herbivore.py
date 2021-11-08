@@ -15,4 +15,5 @@ class Herbivore(Animal):
         food_needed = self.stomach_size - self.food
         food_eaten = min(grass.food, food_needed)
         self.food = self.food + food_eaten
+        self.specie_logger.add_food(grass.name, food_eaten)
         grass.eaten(food_eaten)

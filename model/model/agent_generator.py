@@ -1,9 +1,10 @@
 import uuid
 
 from model.agents.animal import Animal
+from model.agents.animal_list.deer import Deer
+from model.agents.animal_list.rabbit import Rabbit
+from model.agents.animal_list.wolf import Wolf
 from model.agents.grass import Grass
-from model.agents.herbivore_list.deer import Deer
-from model.agents.herbivore_list.rabbit import Rabbit
 from model.logger.grass_logger import GrassLogger
 from model.logger.specie_logger import SpecieLogger
 from service.geographic import GeographicService
@@ -80,13 +81,24 @@ class AgentGenerator:
     def add_deer(self):
         deer_logger = SpecieLogger(Deer)
         self.add_agents_randomly(
-            agents_number=50,
-            agent_class=Deer,
+            agents_number=100,
+            agent_class=Rabbit,
             agent_parameters={
                 "specie_logger": deer_logger
             }
         )
         return deer_logger
+
+    def add_wolf(self):
+        wolf_logger = SpecieLogger(Wolf)
+        self.add_agents_randomly(
+            agents_number=25,
+            agent_class=Wolf,
+            agent_parameters={
+                "specie_logger": wolf_logger
+            }
+        )
+        return wolf_logger
 
     def add_grass(self):
         grass_logger = GrassLogger()
@@ -104,6 +116,7 @@ class AgentGenerator:
 
     def initialise_agents(self):
         rabbit_logger = self.add_rabbit()
-        deer_logger = self.add_deer()
+        # deer_logger = self.add_deer()
+        wolf_logger = self.add_wolf()
         grass_logger = self.add_grass()
-        return [rabbit_logger, deer_logger, grass_logger]
+        return [rabbit_logger, wolf_logger, grass_logger]
