@@ -7,12 +7,6 @@ from service.probability import ProbabilityService
 class Animal(Agent):
     name = "Basic Animal"
 
-    def step(self):
-        self.move()
-        self.nutrition()
-        self.reproduction()
-        self.ageing()
-
     def __init__(
             self,
             unique_id,
@@ -24,6 +18,7 @@ class Animal(Agent):
             sexual_maturity: int,
             specie_logger,
             weight: int,
+            energy_cost: int,
             color="green",
     ):
         super().__init__(unique_id, model)
@@ -39,8 +34,15 @@ class Animal(Agent):
         self.reproduction_probability = reproduction_probability
         self.maximum_children_number = maximum_children_number
         self.sexual_maturity = sexual_maturity
+        self.energy_cost = energy_cost
         self.color = color
         self.specie_logger = specie_logger
+
+    def step(self):
+        self.move()
+        self.nutrition()
+        self.reproduction()
+        self.ageing()
 
     def move(self):
         if not self.is_alive:
@@ -60,7 +62,7 @@ class Animal(Agent):
         if not self.is_alive:
             return
 
-        self.food = self.food - 1
+        self.food = self.food - self.energy_cost
         if self.food <= 0:
             self.death("Food")
             return
@@ -113,12 +115,17 @@ class Animal(Agent):
         for neighbor in reproducible_neighbors:
             if ProbabilityService.random_percentage(self.reproduction_probability):
                 neighbor.has_reproduce()
-                number_of_children = ProbabilityService.random_number(
+                number_of_children_without_food_consideration = ProbabilityService.random_number(
                     maximum=self.maximum_children_number,
                     minimum=1,
                 )
-                self.specie_logger.add_children(number_of_children)
-                for _children in range(number_of_children):
+                real_number_of_children = min(
+                    number_of_children_without_food_consideration,
+                    int(self.food / self.energy_cost)
+                )
+                self.food = self.food - real_number_of_children * self.energy_cost
+                self.specie_logger.add_children(real_number_of_children)
+                for _children in range(real_number_of_children):
                     self.create_child()
 
     def create_child(self):

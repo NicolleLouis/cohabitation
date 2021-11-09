@@ -12,12 +12,13 @@ class Wolf(Carnivore):
     ):
         from model.agents.animal_list.rabbit import Rabbit
 
-        stomach_size = 50
+        stomach_size = 25
         life_expectancy = 80
         reproduction_probability = 2
         maximum_children_number = 1
         sexual_maturity = 15
         weight = 70
+        energy_cost = 5
         color = "red"
         prey_list = {
                 Rabbit: 80,
@@ -33,5 +34,6 @@ class Wolf(Carnivore):
             weight=weight,
             specie_logger=specie_logger,
             color=color,
-            prey_list=prey_list
+            prey_list=prey_list,
+            energy_cost=energy_cost,
         )

@@ -16,6 +16,7 @@ class Deer(Herbivore):
         maximum_children_number = 1
         sexual_maturity = 5
         weight = 100
+        energy_cost = 5
         color = "blue"
         super(Deer, self).__init__(
             unique_id=unique_id,
@@ -28,4 +29,5 @@ class Deer(Herbivore):
             specie_logger=specie_logger,
             weight=weight,
             color=color,
+            energy_cost=energy_cost,
         )

@@ -15,6 +15,7 @@ class Carnivore(Animal):
             specie_logger,
             weight,
             prey_list,
+            energy_cost,
             color="green",
     ):
         """
@@ -26,6 +27,7 @@ class Carnivore(Animal):
         :param maximum_children_number: int
         :param sexual_maturity: int
         :param weight: int
+        :param energy_cost: int
         :param specie_logger: logger
         :param prey_list: {prey_class: hunt_probability}
         :param color: string
@@ -40,6 +42,7 @@ class Carnivore(Animal):
             sexual_maturity=sexual_maturity,
             specie_logger=specie_logger,
             weight=weight,
+            energy_cost=energy_cost,
             color=color,
         )
         self.prey_list = prey_list

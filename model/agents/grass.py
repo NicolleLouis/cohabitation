@@ -12,7 +12,7 @@ class Grass(Agent):
     ):
         super(Grass, self).__init__(unique_id=unique_id, model=model)
         self.food = 0
-        self.food_growth = 1
+        self.food_growth = 10
         self.grass_logger = grass_logger
 
     def step(self):

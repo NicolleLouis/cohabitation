@@ -15,7 +15,8 @@ class Rabbit(Herbivore):
         reproduction_probability = 4
         maximum_children_number = 8
         sexual_maturity = 5
-        weight = 2
+        weight = 3
+        energy_cost = 1
         color = "green"
         super(Rabbit, self).__init__(
             unique_id=unique_id,
@@ -28,4 +29,5 @@ class Rabbit(Herbivore):
             weight=weight,
             specie_logger=specie_logger,
             color=color,
+            energy_cost=energy_cost,
         )
