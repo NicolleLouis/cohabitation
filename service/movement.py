@@ -1,12 +1,11 @@
 class MovementService:
     @staticmethod
-    def random_neighbour(agent):
-        new_position = agent.random.choice(
-            agent.model.grid.get_agent_neighbour_position(
-                agent=agent
-            )
+    def get_neighbours(agent, radius=1):
+        positions = agent.model.grid.get_agent_neighbour_position(
+            agent=agent,
+            radius=radius
         )
-        return new_position
+        return positions
 
     @staticmethod
     def random_position(agent):

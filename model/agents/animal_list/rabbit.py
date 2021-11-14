@@ -17,6 +17,7 @@ class Rabbit(Herbivore):
         sexual_maturity = 5
         weight = 3
         energy_cost = 1
+        sight_size = 1
         color = "green"
         super(Rabbit, self).__init__(
             unique_id=unique_id,
@@ -30,4 +31,5 @@ class Rabbit(Herbivore):
             specie_logger=specie_logger,
             color=color,
             energy_cost=energy_cost,
+            sight_size=sight_size,
         )

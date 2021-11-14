@@ -19,6 +19,7 @@ class Animal(Agent):
             specie_logger,
             weight: int,
             energy_cost: int,
+            sight_size: int,
             color="green",
     ):
         super().__init__(unique_id, model)
@@ -35,6 +36,7 @@ class Animal(Agent):
         self.maximum_children_number = maximum_children_number
         self.sexual_maturity = sexual_maturity
         self.energy_cost = energy_cost
+        self.sight_size = sight_size
         self.color = color
         self.specie_logger = specie_logger
 
@@ -52,8 +54,15 @@ class Animal(Agent):
         self.modify_position(new_position)
 
     def next_position(self):
-        new_position = MovementService.random_neighbour(agent=self)
-        return new_position
+        potential_positions = MovementService.get_neighbours(agent=self, radius=self.sight_size)
+        best_position = self.pos
+        best_food = 0
+        for position in potential_positions:
+            potential_food = self.food_on_position(position)
+            if potential_food > best_food:
+                best_food = potential_food
+                best_position = position
+        return best_position
 
     def modify_position(self, position):
         self.grid.move_agent(self, position)
@@ -69,7 +78,10 @@ class Animal(Agent):
         self.eat()
 
     def eat(self):
-        raise NotImplementedError("Each animal must have a eat function")
+        raise NotImplementedError("Each animal must have a 'eat' function")
+
+    def food_on_position(self, position):
+        raise NotImplementedError("Each animal must have a 'food_on_position' function")
 
     def get_neighbors(self):
         neighbors = self.grid.get_grid_content(

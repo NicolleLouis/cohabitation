@@ -18,8 +18,9 @@ class Wolf(Carnivore):
         maximum_children_number = 1
         sexual_maturity = 15
         weight = 70
-        energy_cost = 5
+        energy_cost = 3
         color = "red"
+        sight_size = 2
         prey_list = {
                 Rabbit: 80,
             }
@@ -36,4 +37,5 @@ class Wolf(Carnivore):
             color=color,
             prey_list=prey_list,
             energy_cost=energy_cost,
+            sight_size=sight_size,
         )

@@ -16,6 +16,7 @@ class Carnivore(Animal):
             weight,
             prey_list,
             energy_cost,
+            sight_size,
             color="green",
     ):
         """
@@ -28,6 +29,7 @@ class Carnivore(Animal):
         :param sexual_maturity: int
         :param weight: int
         :param energy_cost: int
+        :param sight_size: int
         :param specie_logger: logger
         :param prey_list: {prey_class: hunt_probability}
         :param color: string
@@ -44,11 +46,12 @@ class Carnivore(Animal):
             weight=weight,
             energy_cost=energy_cost,
             color=color,
+            sight_size=sight_size,
         )
         self.prey_list = prey_list
 
     def eat(self):
-        potential_prey = list(
+        potential_preys = list(
             filter(
                 lambda agent: type(agent) in self.prey_list,
                 self.grid.get_grid_content(
@@ -56,7 +59,7 @@ class Carnivore(Animal):
                 )
             )
         )
-        for prey in potential_prey:
+        for prey in potential_preys:
             food_needed = self.stomach_size - self.food
             if food_needed * 2 < prey.weight:
                 continue
@@ -65,3 +68,17 @@ class Carnivore(Animal):
                 self.food = min(self.food + prey.weight, self.stomach_size)
                 prey.death(f'Eaten by {self.name}')
                 self.specie_logger.add_food(prey.name)
+
+    def food_on_position(self, position):
+        potential_preys = list(
+            filter(
+                lambda agent: type(agent) in self.prey_list,
+                self.grid.get_grid_content(
+                    positions=position
+                )
+            )
+        )
+        food = 0
+        for prey in potential_preys:
+            food += prey.weight
+        return food

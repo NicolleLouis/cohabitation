@@ -1,7 +1,6 @@
 import uuid
 
 from model.agents.animal import Animal
-from model.agents.animal_list.deer import Deer
 from model.agents.animal_list.rabbit import Rabbit
 from model.agents.animal_list.wolf import Wolf
 from model.agents.grass import Grass
@@ -34,7 +33,7 @@ class AgentGenerator:
              self,
              agents_number,
              position,
-             agent_class=Animal,
+             agent_class,
              agent_parameters=None,
      ):
         for _i in range(agents_number):
@@ -67,38 +66,16 @@ class AgentGenerator:
         self.schedule.add(agent)
         return agent
 
-    def add_rabbit(self):
-        rabbit_logger = SpecieLogger(Rabbit)
+    def add_animal(self, animal_class, number=100):
+        animal_logger = SpecieLogger(animal_class)
         self.add_agents_randomly(
-            agents_number=100,
-            agent_class=Rabbit,
+            agents_number=number,
+            agent_class=animal_class,
             agent_parameters={
-                "specie_logger": rabbit_logger
+                "specie_logger": animal_logger
             }
         )
-        return rabbit_logger
-
-    def add_deer(self):
-        deer_logger = SpecieLogger(Deer)
-        self.add_agents_randomly(
-            agents_number=100,
-            agent_class=Rabbit,
-            agent_parameters={
-                "specie_logger": deer_logger
-            }
-        )
-        return deer_logger
-
-    def add_wolf(self):
-        wolf_logger = SpecieLogger(Wolf)
-        self.add_agents_randomly(
-            agents_number=25,
-            agent_class=Wolf,
-            agent_parameters={
-                "specie_logger": wolf_logger
-            }
-        )
-        return wolf_logger
+        return animal_logger
 
     def add_grass(self):
         grass_logger = GrassLogger()
@@ -115,8 +92,7 @@ class AgentGenerator:
         return grass_logger
 
     def initialise_agents(self):
-        rabbit_logger = self.add_rabbit()
-        # deer_logger = self.add_deer()
-        wolf_logger = self.add_wolf()
+        rabbit_logger = self.add_animal(Rabbit, 100)
+        wolf_logger = self.add_animal(Wolf, 1)
         grass_logger = self.add_grass()
         return [rabbit_logger, wolf_logger, grass_logger]

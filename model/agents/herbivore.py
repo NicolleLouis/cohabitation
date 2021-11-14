@@ -17,3 +17,14 @@ class Herbivore(Animal):
         self.food = self.food + food_eaten
         self.specie_logger.add_food(grass.name, food_eaten)
         grass.eaten(food_eaten)
+
+    def food_on_position(self, position):
+        grass = list(
+            filter(
+                lambda agent: isinstance(agent, Grass),
+                self.grid.get_grid_content(
+                    positions=position
+                )
+            )
+        )[0]
+        return grass.food
