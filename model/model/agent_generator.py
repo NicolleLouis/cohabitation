@@ -1,6 +1,7 @@
 import uuid
 
 from model.agents.animal import Animal
+from model.agents.animal_list.fox import Fox
 from model.agents.animal_list.rabbit import Rabbit
 from model.agents.animal_list.wolf import Wolf
 from model.agents.grass import Grass
@@ -30,12 +31,12 @@ class AgentGenerator:
             self.grid.place_agent_randomly(agent)
 
     def add_agents(
-             self,
-             agents_number,
-             position,
-             agent_class,
-             agent_parameters=None,
-     ):
+            self,
+            agents_number,
+            position,
+            agent_class,
+            agent_parameters=None,
+    ):
         for _i in range(agents_number):
             agent = self.create_agent(
                 agent_class=agent_class,
@@ -92,7 +93,7 @@ class AgentGenerator:
         return grass_logger
 
     def initialise_agents(self):
-        rabbit_logger = self.add_animal(Rabbit, 100)
-        wolf_logger = self.add_animal(Wolf, 1)
+        rabbit_logger = self.add_animal(Rabbit, 250)
+        wolf_logger = self.add_animal(Wolf, 10)
         grass_logger = self.add_grass()
         return [rabbit_logger, wolf_logger, grass_logger]

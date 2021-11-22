@@ -1,9 +1,8 @@
-from model.agents.animal_list.fox import Fox
 from model.agents.carnivore import Carnivore
 
 
-class Wolf(Carnivore):
-    name = "Loup"
+class Fox(Carnivore):
+    name = "Renard"
 
     def __init__(
             self,
@@ -13,20 +12,19 @@ class Wolf(Carnivore):
     ):
         from model.agents.animal_list.rabbit import Rabbit
 
-        stomach_size = 25
-        life_expectancy = 80
-        reproduction_probability = 2
-        maximum_children_number = 1
-        sexual_maturity = 15
-        weight = 70
-        energy_cost = 3
-        color = "red"
-        sight_size = 2
+        stomach_size = 10
+        life_expectancy = 40
+        reproduction_probability = 10
+        maximum_children_number = 4
+        sexual_maturity = 10
+        weight = 25
+        energy_cost = 2
+        color = "blue"
+        sight_size = 1
         prey_list = {
-                Rabbit: 80,
-                Fox: 10,
+                Rabbit: 50,
             }
-        super(Wolf, self).__init__(
+        super(Fox, self).__init__(
             unique_id=unique_id,
             model=model,
             stomach_size=stomach_size,

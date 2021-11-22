@@ -1,5 +1,8 @@
+import random
+
 from mesa import Agent
 
+from constants.gender import Gender
 from service.movement import MovementService
 from service.probability import ProbabilityService
 
@@ -20,7 +23,8 @@ class Animal(Agent):
             weight: int,
             energy_cost: int,
             sight_size: int,
-            color="green",
+            gender: str = None,
+            color: str = "green"
     ):
         super().__init__(unique_id, model)
         self.grid = self.model.grid
@@ -37,6 +41,12 @@ class Animal(Agent):
         self.sexual_maturity = sexual_maturity
         self.energy_cost = energy_cost
         self.sight_size = sight_size
+
+        if gender is None:
+            self.gender = random.choice([Gender.MALE, Gender.FEMALE])
+        else:
+            self.gender = gender
+
         self.color = color
         self.specie_logger = specie_logger
 
@@ -55,7 +65,7 @@ class Animal(Agent):
 
     def next_position(self):
         potential_positions = MovementService.get_neighbours(agent=self, radius=self.sight_size)
-        best_position = self.pos
+        best_position = random.choice(potential_positions)
         best_food = 0
         for position in potential_positions:
             potential_food = self.food_on_position(position)
@@ -98,47 +108,39 @@ class Animal(Agent):
         )
         return neighbors
 
-    def has_reproduce(self):
-        self.has_reproduced = True
-
-    def reset_reproduction(self):
-        self.has_reproduced = False
-
-    def can_reproduce(self):
-        return not self.has_reproduced
-
     def reproduction(self):
-        if self.has_reproduced:
-            return
-
         if not self.is_alive:
             return
 
         if self.age < self.sexual_maturity:
             return
 
+        if self.gender != Gender.FEMALE:
+            return
+
         neighbors = self.get_neighbors()
-        reproducible_neighbors = list(
+        male_neighbors = list(
             filter(
-                lambda neighbor: neighbor.can_reproduce(),
+                lambda neighbor: neighbor.gender == Gender.MALE,
                 neighbors
             )
         )
-        for neighbor in reproducible_neighbors:
-            if ProbabilityService.random_percentage(self.reproduction_probability):
-                neighbor.has_reproduce()
-                number_of_children_without_food_consideration = ProbabilityService.random_number(
-                    maximum=self.maximum_children_number,
-                    minimum=1,
-                )
-                real_number_of_children = min(
-                    number_of_children_without_food_consideration,
-                    int(self.food / self.energy_cost)
-                )
-                self.food = self.food - real_number_of_children * self.energy_cost
-                self.specie_logger.add_children(real_number_of_children)
-                for _children in range(real_number_of_children):
-                    self.create_child()
+        if len(male_neighbors) == 0:
+            return
+
+        if ProbabilityService.random_percentage(self.reproduction_probability):
+            number_of_children_without_food_consideration = ProbabilityService.random_number(
+                maximum=self.maximum_children_number,
+                minimum=1,
+            )
+            real_number_of_children = min(
+                number_of_children_without_food_consideration,
+                int(self.food / self.energy_cost)
+            )
+            self.food = self.food - real_number_of_children * self.energy_cost
+            self.specie_logger.add_children(real_number_of_children)
+            for _children in range(real_number_of_children):
+                self.create_child()
 
     def create_child(self):
         self.model.agent_generator.add_agents(

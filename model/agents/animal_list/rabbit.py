@@ -12,7 +12,7 @@ class Rabbit(Herbivore):
     ):
         stomach_size = 3
         life_expectancy = 10
-        reproduction_probability = 4
+        reproduction_probability = 9
         maximum_children_number = 8
         sexual_maturity = 5
         weight = 3
